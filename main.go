@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	count("Cat")
+	go count("Cat")
 	count("Dog")
 }
 
