@@ -8,6 +8,8 @@ import (
 func main() {
 	go count("Cat")
 	go count("Dog")
+
+	time.Sleep(time.Second * 2)
 }
 
 func count(item string) {
