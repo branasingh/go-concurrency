@@ -11,9 +11,10 @@ func main() {
 
 	go count("Cat", channel)
 
-	msg := <-channel
-
-	fmt.Println(msg)
+	for {
+		msg := <-channel
+		fmt.Println(msg)
+	}
 
 }
 
