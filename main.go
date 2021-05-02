@@ -12,7 +12,10 @@ func main() {
 	go count("Cat", channel)
 
 	for {
-		msg := <-channel
+		msg, open := <-channel
+		if !open {
+			break
+		}
 		fmt.Println(msg)
 	}
 
@@ -24,4 +27,5 @@ func count(item string, channel chan string) {
 		channel <- item
 		time.Sleep(time.Millisecond * 500)
 	}
+	close(channel)
 }
