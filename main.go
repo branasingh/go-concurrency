@@ -2,27 +2,25 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
 func main() {
 
-	var wg sync.WaitGroup
+	channel := make(chan string)
 
-	wg.Add(1)
+	go count("Cat", channel)
 
-	func() {
-		go count("Cat")
-	}()
+	msg := <-channel
 
-	wg.Wait()
+	fmt.Println(msg)
+
 }
 
-func count(item string) {
+func count(item string, channel chan string) {
 	// Infinite incremental counter
 	for i := 1; i <= 5; i++ {
-		fmt.Println(i, item)
+		channel <- item
 		time.Sleep(time.Millisecond * 500)
 	}
 }
