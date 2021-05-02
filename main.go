@@ -2,30 +2,40 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"strconv"
 )
 
 func main() {
 
-	channel := make(chan string)
+	jobs := make(chan int, 100)
+	results := make(chan string, 100)
 
-	go count("Cat", channel)
+	go worker(jobs, results)
+	// go worker(jobs, results)
+	// go worker(jobs, results)
+	// go worker(jobs, results)
 
-	for {
-		msg, open := <-channel
-		if !open {
-			break
-		}
-		fmt.Println(msg)
+	for i := 0; i < 100; i++ {
+		jobs <- i
 	}
+	close(jobs)
 
+	for j := 0; j < 100; j++ {
+		fmt.Println(<-results)
+	}
 }
 
-func count(item string, channel chan string) {
-	// Infinite incremental counter
-	for i := 1; i <= 5; i++ {
-		channel <- item
-		time.Sleep(time.Millisecond * 500)
+// Jobs Channel is only can read from
+// Results Channel is only can write in to
+func worker(jobs <-chan int, results chan<- string) {
+	for n := range jobs {
+		results <- "Square root of " + strconv.Itoa(n) + " is :" + strconv.Itoa(square(n))
 	}
-	close(channel)
+}
+
+func square(number int) int {
+	// if number%4 == 0 {
+	// time.Sleep(time.Millisecond * 5000)
+	// }
+	return number * number
 }
