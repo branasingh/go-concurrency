@@ -7,6 +7,7 @@ import (
 
 func main() {
 	count("Cat")
+	count("Dog")
 }
 
 func count(item string) {
