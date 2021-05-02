@@ -2,19 +2,26 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
-	go count("Cat")
-	go count("Dog")
 
-	time.Sleep(time.Second * 2)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	func() {
+		go count("Cat")
+	}()
+
+	wg.Wait()
 }
 
 func count(item string) {
 	// Infinite incremental counter
-	for i := 1; true; i++ {
+	for i := 1; i <= 5; i++ {
 		fmt.Println(i, item)
 		time.Sleep(time.Millisecond * 500)
 	}
